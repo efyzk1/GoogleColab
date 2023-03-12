@@ -1,0 +1,17 @@
+import math
+
+fixed_coords = [(50, 45), (2, 7), (10, 20)]  # example fixed coordinates
+
+def nearest_fixed_coord(coord):
+    min_distance = float('inf')
+    nearest_coord = None
+    for fixed_coord in fixed_coords:
+        distance = math.sqrt((fixed_coord[0] - coord[0])**2 + (fixed_coord[1] - coord[1])**2)
+        if distance < min_distance:
+            min_distance = distance
+            nearest_coord = fixed_coord
+    return nearest_coord
+
+given_coord = (5, 10)  # example given coordinate
+nearest_coord = nearest_fixed_coord(given_coord)
+print(nearest_coord)  # prints (2, 7), the nearest fixed coordinate to (5, 10)
