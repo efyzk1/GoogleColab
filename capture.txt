@@ -1,0 +1,39 @@
+import cv2
+import os
+
+number_photo=32;
+
+# initialize the camera
+camera = cv2.VideoCapture(0)
+
+# create a folder to store the photos
+if not os.path.exists("Blue_Parcel"):
+    os.makedirs("Blue_Parcel")
+
+while True:
+    # capture a frame from the camera
+    ret, frame = camera.read()
+
+    # display the frame
+    cv2.imshow("Camera", frame)
+
+    # wait for a key press
+    key = cv2.waitKey(1) & 0xFF
+
+    # check if the 's' key is pressed
+    if key == ord("s"):
+        # generate a unique filename for each photos
+        
+        filename = "photo_"+str(number_photo)+".jpg"
+        
+        number_photo+=1
+        # save the photo to disk in the "photos" folder
+        cv2.imwrite(os.path.join("Blue_Parcel", filename), frame)
+    
+    if key == ord("q"):
+        
+        break
+
+# release the camera and close the display window
+camera.release()
+cv2.destroyAllWindows()
