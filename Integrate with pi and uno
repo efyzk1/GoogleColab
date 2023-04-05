@@ -1,0 +1,60 @@
+import socket
+import serial
+import subprocess
+
+# Set up socket for receiving messages from another Raspberry Pi
+HOST = '0.0.0.0'  # Bind to all network interfaces
+PORT = 12345  # Use a free port number of your choice
+
+# Set up serial communication with Arduino Uno
+SERIAL_PORT = '/dev/ttyUSB0'  # Replace with the serial port of your Arduino Uno
+SERIAL_BAUDRATE = 9600  # Set the baud rate of your Arduino Uno
+
+# Create a socket for receiving messages from another Raspberry Pi
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.bind((HOST, PORT))
+server_socket.listen(1)
+print('Waiting for connections...')
+
+# Accept incoming connection
+conn, addr = server_socket.accept()
+print('Connected by', addr)
+
+# Open serial connection to Arduino Uno
+ser = serial.Serial(SERIAL_PORT, SERIAL_BAUDRATE)
+
+while True:
+    # Receive data from Raspberry Pi
+    data = conn.recv(1024).decode().strip()
+    print('Received:', data)
+
+    # Check if the received message is "start scan"
+    if data == 'start scan':
+        print('Starting scan...')
+        # Run specific Python file for scanning
+        # Replace with the actual code for running the specific Python file
+        try:
+            subprocess.run(['python', 'path/to/your/python_file.py'])
+        except Exception as e:
+            print(f'Error running python file: {e}')
+
+    # Check if the received message is "done"
+    elif data == 'done':
+        print('Sending "done" message to another Raspberry Pi...')
+        # Send "done" message to another Raspberry Pi
+        # Replace with the actual code for sending the "done" message
+
+    # If the received message is not recognized
+    else:
+        print('Unknown command:', data)
+
+    # Read data from Arduino Uno
+    arduino_data = ser.readline().decode().strip()
+    print('Arduino Data:', arduino_data)
+
+    # Add your logic here for processing data received from Arduino Uno
+
+# Close socket and serial connection
+conn.close()
+server_socket.close()
+ser.close()
